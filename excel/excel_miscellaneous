@@ -1,0 +1,74 @@
+-----------------------Finding Bold Text From whole text-----------------
+/*
+1. get Sheet . Then Cell.
+*/
+
+			$dimesion = $this->getCurrentRecordDimensions();
+				$sheet = $this->getCurrentSheet();
+//				$sheet = PHPExcelUtils::getCellStylesArray($this->getCurrentSheet());
+				echo $dimesion['title']['col'] . $dimesion['title']['row'];
+				echo "\n";
+				$cell = $sheet->getCell($dimesion['title']['col'] . $dimesion['title']['row']);
+
+
+				// Value
+				$cellData = '';
+
+				if ($cell->getValue() instanceof PHPExcel_RichText) {				//find bold text.
+
+					// Loop through rich text elements
+					$elements = $cell->getValue()->getRichTextElements();
+//					print_r($elements);
+					foreach ($elements as $element) {
+
+						echo "=========\n\n\n";
+						//PHPExcel_RichText
+						if ($element instanceof PHPExcel_RichText_Run){
+						//bold  text
+						}else{
+						//normal text
+						}
+				/////////////////////////////////////OR/////////////////////////////////////////////
+						if ($element instanceof PHPExcel_RichText_Run) { //if we use this in else we get bold text.
+							echo "FROm===IF\n";
+							print_r($element->getText());
+							echo "\n";
+						} else {
+
+							echo "\n========================BOLD Text=======================\n";
+							print_r($element->getText());
+							echo "\n";
+							echo "\n";
+							echo "\n========================BOLD Text=======================\n";
+						}
+//						echo "\n";
+//						// Rich text start?
+//						if ($element instanceof PHPExcel_RichText_Run) {
+//
+//							$cellData .= '<span style="' . $this->_assembleCSS($this->_createCSSStyleFont($element->getFont())) . '">';
+//
+//							if ($element->getFont()->getSuperScript()) {
+//								$cellData .= '<sup>';
+//							} else if ($element->getFont()->getSubScript()) {
+//								$cellData .= '<sub>';
+//							}
+//						}
+//
+//						// Convert UTF8 data to PCDATA
+//						$cellText = $element->getText();
+//						$cellData .= htmlspecialchars($cellText);
+//
+//						if ($element instanceof PHPExcel_RichText_Run) {
+//							if ($element->getFont()->getSuperScript()) {
+//								$cellData .= '</sup>';
+//							} else if ($element->getFont()->getSubScript()) {
+//								$cellData .= '</sub>';
+//							}
+//
+//							$cellData .= '</span>';
+//						}
+					}
+				}
+
+-----------------------Finding Bold Text From whole text-----------------
+
