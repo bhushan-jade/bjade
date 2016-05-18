@@ -1,0 +1,51 @@
+#referenc :http://lethain.com/parallel-http-requests-in-python/
+My code ended up looking like this (let's say that it is stored in a file named multi_get.py for the following eample):
+
+from threading import Thread, enumerate
+from urllib import urlopen
+from time import sleep
+
+UPDATE_INTERVAL = 0.01
+
+class URLThread(Thread):
+    def __init__(self,url):
+        super(URLThread, self).__init__()
+        self.url = url
+        self.response = None
+
+    def run(self):
+        self.request = urlopen(self.url)
+        self.response = self.request.read()
+
+def multi_get(uris,timeout=2.0):
+    def alive_count(lst):
+        alive = map(lambda x : 1 if x.isAlive() else 0, lst)
+        return reduce(lambda a,b : a + b, alive)
+    threads = [ URLThread(uri) for uri in uris ]
+    for thread in threads:
+        thread.start()
+    while alive_count(threads) > 0 and timeout > 0.0:
+        timeout = timeout - UPDATE_INTERVAL
+        sleep(UPDATE_INTERVAL)
+    return [ (x.url, x.response) for x in threads ]
+Usage looks like this:
+
+from multi_get import multi_get
+sites = ['http://msn.com/','http://yahoo.com/','http://google.com/']
+requests = multi_get(sites,timeout=1.5)
+for url, data in requests:
+    print "received this data %s from this url %s" % (url,data)
+I did some comparison testing against this straightforward sequential implementation,
+
+from urllib import urlopen
+import time
+
+results = []
+sites = ('http://msn.com/','http://yahoo.com/','http://google.com/')
+
+for site in sites:
+    start = time.time()
+    req = urlopen(site)
+    results.append((site, req.read()))
+    end = time.time()
+    print "took %s seconds" % (end-start)

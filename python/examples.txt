@@ -1,0 +1,45 @@
+import sys
+import urllib2
+import time
+execfile("common.py")
+from urllib import urlopen
+import time
+
+results = []
+sites = ('http://www.mediaset.it/guidatv/inc/canali/201605/20160518_R4.sjson',
+'http://www.mediaset.it/guidatv/inc/canali/201605/20160519_R4.sjson')
+
+for site in sites:
+    start = time.time()
+    req = urlopen(site)
+    results.append((site, req.read()))
+    end = time.time()
+    print "took %s seconds" % (end-start)
+
+exit()
+from multi_get import multi_get
+sites = [
+    'http://www.mediaset.it/guidatv/inc/canali/201605/20160518_R4.sjson',
+    'http://www.mediaset.it/guidatv/inc/canali/201605/20160519_R4.sjson'
+]
+requests = multi_get(sites,timeout=1.5)
+start = time.time()
+for url, data in requests:
+    print "received this data %s from this url %s" % (url,data)
+
+end = time.time()
+print "\n"
+print "took %s seconds" % (end-start)
+exit()
+urls = ''
+rs = (grequests.get(u) for u in urls)
+grequests.map(rs)
+pprint(rs)
+exit()
+url = 'http://www.mediaset.it/guidatv/inc/canali/201605/20160518_R4.sjson'
+req = urllib2.Request(url)
+
+response = urllib2.urlopen(req)
+result = response.read()
+pprint(result)
+

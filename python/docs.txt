@@ -1,0 +1,2 @@
+Python multiple http request :
+http://lethain.com/parallel-http-requests-in-python/
